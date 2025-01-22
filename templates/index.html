@@ -66,9 +66,9 @@
     <div class="container">
         <h1>Zoom Meeting Joiner</h1>
         <form id="zoom-form">
-            <input type="text" id="zoom-link" placeholder="Enter Zoom meeting link" required>
+            <input type="text" id="zoom-link" placeholder="Enter Zoom  link" required>
             <input type="number" id="meeting-duration" placeholder="Enter meeting duration in minutes" required>
-            <input type="text" id="user-name" placeholder="Enter your name" required>
+            <input type="text" id="user-name" placeholder="Enter your name (visible in meeting)" required>
             <button type="submit">Join Meeting</button>
         </form>
         </form>
@@ -84,8 +84,8 @@
                     method: 'POST',
                     data: {
                         zoom_link: $('#zoom-link').val(),
-                        meeting_duration: $('#meeting-duration').val(),//+
-                        user_name: $('#user-name').val()//+
+                        meeting_duration: $('#meeting-duration').val(),
+                        user_name: $('#user-name').val()
                     },
                     success: function(response) {
                         $('#message').text(response.message).removeClass('error').addClass('success');
