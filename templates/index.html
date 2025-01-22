@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Meeting Joiner</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #message {
+            margin-top: 1rem;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zoom Meeting Joiner</h1>
+        <form id="zoom-form">
+            <input type="text" id="zoom-link" placeholder="Enter Zoom meeting link" required>
+            <input type="number" id="meeting-duration" placeholder="Enter meeting duration in minutes" required>
+            <input type="text" id="user-name" placeholder="Enter your name" required>
+            <button type="submit">Join Meeting</button>
+        </form>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#zoom-form').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/',
+                    method: 'POST',
+                    data: {
+                        zoom_link: $('#zoom-link').val(),
+                        meeting_duration: $('#meeting-duration').val(),//+
+                        user_name: $('#user-name').val()//+
+                    },
+                    success: function(response) {
+                        $('#message').text(response.message).removeClass('error').addClass('success');
+                    },
+                    error: function(xhr) {
+                        $('#message').text(xhr.responseJSON.error).removeClass('success').addClass('error');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
