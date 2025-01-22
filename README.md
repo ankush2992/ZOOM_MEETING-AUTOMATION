@@ -59,39 +59,9 @@ This script automates joining Zoom meetings using Selenium and the Microsoft Edg
 
 ---
 
-## Script Options
 
-### Headless Mode
-You can run the script in headless mode by modifying the `open_link_with_selenium` function:
 
-```python
-open_link_with_selenium(zoom_link, meeting_duration, user_name, headless=True)
-```
 
-### Error Handling
-- If an error occurs during execution, a screenshot (`error_screenshot.png`) will be saved in the script directory for debugging.
-
----
-
-## File Overview
-
-- **`zoom_meeting_automation.py`**: Main script file.
-- **Error Handling**: Saves a screenshot if any error occurs.
-
----
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request for review.
-
----
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
----
 
 ## Disclaimer
-
-This script is for educational and personal use only. Ensure you have permission to automate any meeting links you use with this tool.
+This project is provided for educational and personal use only. The developer is not responsible for any misuse, compliance violations, or potential issues arising from the use of this tool. Please use responsibly and ensure adherence to Zoom's terms of service and privacy policies.
