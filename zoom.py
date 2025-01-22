@@ -1,5 +1,4 @@
-# basic setup , directly entering names in the name input box , and jopins the meeting 
-
+# used Edge Browser for automation . 
 import re
 import time
 from selenium import webdriver
@@ -28,34 +27,36 @@ def open_link_with_selenium(link, meeting_duration, user_name, headless=False):#
     if headless:
         print("Running in headless mode")
         edge_options.add_argument('--headless')  # Enable headless mode
-        edge_options.add_argument('window-size=1920x1080')  # Set window size for headless mode
+        edge_options.add_argument('window-size=1920x1080')  # Configure your desired window size
     else:
         print("Running in visible mode")
 
     edge_options.add_argument('--disable-gpu')  # Disable GPU for compatibility
-    edge_options.add_argument('--disable-blink-features=AutomationControlled')  # Avoid detection
-    edge_options.add_argument('--no-sandbox')  # Useful for VPS environments
+    edge_options.add_argument('--disable-blink-features=AutomationControlled')  # Avoid detection (your automation script wont be visible)
+    edge_options.add_argument('--no-sandbox')  # Useful for VPS environments (if you used to host code in there)
 
-    # Optional: Custom user-agent string
+    # Custom user-agent string (denotes you as a user)
     edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.902.67 Safari/537.36 Edg/92.0.902.67")
 
     # Initialize Edge WebDriver with options
     driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=edge_options)
 
+    
+    # ---> Processes the web automation on browser . everything is automatic (may get error if website changes its interface)
     try:
         driver.get(link)
         print(f"Opened link in Edge: {link}")
 
-        print("Waiting for 'Launch Meeting' button...")
+        print("Waiting for 'Launch Meeting' button...")               # initial link opening (landing page)
         launch_meeting_button = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "mbTuDeF1"))
+            EC.presence_of_element_located((By.CLASS_NAME, "mbTuDeF1"))    # (locater for the button)
         )
-        driver.execute_script("arguments[0].click();", launch_meeting_button)
-        print("Clicked the 'Launch Meeting' button")
+        driver.execute_script("arguments[0].click();", launch_meeting_button)       # stimulate a mouse click , similar to your manual Left Click
+        print("Clicked the 'Launch Meeting' button")                                     # confirmation for the link opening (on terminal)
 
-        print("Waiting for 'Join from your browser' button...")
+        print("Waiting for 'Join from your browser' button...")         #  --->>  same setup as above (for next buttons)  <<-----
         join_from_browser_button = WebDriverWait(driver, 30).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id=\"zoom-ui-frame\"]/div[2]/div/div[2]/h3[2]/span/a'))
+            EC.element_to_be_clickable((By.XPATH, '//*[@id=\"zoom-ui-frame\"]/div[2]/div/div[2]/h3[2]/span/a'))             # used xpath as a locator element (get these vis inspect elements on the zoom website)
         )
         driver.execute_script("arguments[0].click();", join_from_browser_button)
         print("Clicked the 'Join from your browser' button")
@@ -75,8 +76,8 @@ def open_link_with_selenium(link, meeting_duration, user_name, headless=False):#
         name_input_field.click()
         name_input_field.clear()
 
-        name_input_field.send_keys(user_name)#+
-        print(f"Name entered successfully: {user_name}")#+
+        name_input_field.send_keys(user_name)                               # entering your name (name to apppear on the meeting)
+        print(f"Name entered successfully: {user_name}")
         driver.switch_to.default_content()
         ActionChains(driver).send_keys(Keys.ENTER).perform()
         print("Pressed the Enter key to join the meeting")
@@ -84,18 +85,18 @@ def open_link_with_selenium(link, meeting_duration, user_name, headless=False):#
         # Convert meeting duration from minutes to seconds
         duration = meeting_duration * 60
         elapsed = 0
-        interval = 60  # check every 60 seconds
+        interval = 60  # check every 60 seconds and notify it
         print(f"Keeping the session alive for {meeting_duration} minutes...")
         while elapsed < duration:
             time.sleep(interval)
             elapsed += interval
             print(f"Elapsed time: {elapsed // 60} minutes")
 
-        print(f"{meeting_duration} minutes completed. Closing the browser...")
+        print(f"{meeting_duration} minutes completed. Closing the browser...")        # your time compleates and the meeting will end from your side . (not from the host side)
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        driver.save_screenshot("error_screenshot.png")  # Save a screenshot for debugging
+        driver.save_screenshot("error_screenshot.png")  # Save a screenshot for debugging (necessaey for Headless mode as you cant see a visible browser)  [no need for visible browser (there you can track the error)]
 
     finally:
         driver.quit()
@@ -108,7 +109,7 @@ if __name__ == '__main__':
         try:
             user_input = input("Enter the Zoom meeting link (or type 'exit' to quit): ")
             if user_input.lower() == 'exit':
-                print("Exiting the script. Goodbye!")
+                print("Terminating the script. bye bye!")
                 break
 
             if is_link(user_input):
@@ -120,19 +121,19 @@ if __name__ == '__main__':
                             if meeting_duration > 0:
                                 break
                             else:
-                                print("Duration must be a positive number. Please try again.")
+                                print("Duration must be a positive integer. Please try again.")
                         except ValueError:
                             print("Invalid input. Please enter a valid number.")
 
-                    print(f"Joining Zoom meeting for {meeting_duration} minutes: {zoom_link}")
+                    print(f"Joining your meeting for {meeting_duration} minutes: {zoom_link}")
                     open_link_with_selenium(zoom_link, meeting_duration)
                 else:
-                    print("Invalid link format. Please try again.")
+                    print("Invalid link format. Please try again. if link is correct change the link extraction code in the code")
             else:
                 print("No valid link detected. Please enter a valid Zoom meeting link.")
 
         except KeyboardInterrupt:
-            print("\nScript interrupted. Exiting gracefully...")
+            print("\ni see , you ,must have pressed CTRL+C  . Exiting the code now as you command...")
             break
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            print(f"some error happened: {e}")
