@@ -29,12 +29,12 @@ def index():
             return jsonify({"error": "Invalid duration"}), 400
 
         
-        # Submit the job
+        # Submit job
         try:
-            future = executor.submit(open_link_with_selenium, extracted_link, duration, user_name)#+
-            return jsonify({"message": f"Joining Zoom meeting for {duration} minutes as {user_name}: {extracted_link}"}), 200#+
+            future = executor.submit(open_link_with_selenium, extracted_link, duration, user_name)
+            return jsonify({"message": f"Joining Zoom meeting for {duration} minutes as {user_name}: {extracted_link}"}), 200
         except RuntimeError:#+
-            return jsonify({"error": "Server is at capacity. Please try again later."}), 503#+
+            return jsonify({"error": "Server is at capacity. Please try again later."}), 503
 
   
     return render_template('index.html')
