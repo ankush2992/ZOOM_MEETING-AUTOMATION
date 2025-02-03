@@ -89,7 +89,7 @@
                     },
                     success: function(response) {
                         $('#message').text(response.message).removeClass('error').addClass('success');
-                    },
+                    }, 
                     error: function(xhr) {
                         $('#message').text(xhr.responseJSON.error).removeClass('success').addClass('error');
                     }
